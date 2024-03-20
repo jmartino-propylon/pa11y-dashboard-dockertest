@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
+  dashboard: # New service name for clarity
+    image: node:current-slim  # Specify the base image here
+    build: .  # Build the image from the current directory (context)
+    ports:
+      - "4000:4000"  # Expose port 4000
+    volumes:
+      - ./dashboard:/dashboard  # Mount current directory's 'dashboard' folder
+    depends_on:  # Optional: wait for mongo service to be ready
+      - mongo
+    environment:  # Optional: Add environment variables here (refer to previous suggestion)
+      NODE_ENV: production
+
+volumes:
+  mongodb:
